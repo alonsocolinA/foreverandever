@@ -1,43 +1,85 @@
-
-## Opción B) GitHub Pages (una página que lo muestra infinitamente)
-1) Crea un archivo `index.html` en tu repo y pega:
-
-```html
 <!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Te amo infinitamente</title>
+  <title>Te amo</title>
   <style>
     body{
       margin:0;
       height:100vh;
-      display:grid;
-      place-items:center;
       background:#0b0b10;
       color:#fff;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       overflow:hidden;
+      display:flex;
+      flex-direction:column;
     }
-    .msg{
-      font-size: clamp(2rem, 7vw, 6rem);
-      letter-spacing: .04em;
-      animation: pulse 1.6s ease-in-out infinite;
-      text-align:center;
-      padding: 0 16px;
+    header{
+      padding:14px 18px;
+      font-size:14px;
+      opacity:.75;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
     }
-    .sub{ opacity:.8; font-size: 1rem; margin-top: 10px; text-align:center;}
-    @keyframes pulse{
-      0%,100%{ transform: scale(1); opacity:.85; }
-      50%{ transform: scale(1.08); opacity:1; }
+    main{
+      flex:1;
+      padding:18px;
+      overflow:auto;
+      line-height:1.15;
+      font-size: clamp(18px, 3.2vw, 34px);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .pill{
+      font-size:12px;
+      padding:6px 10px;
+      border:1px solid rgba(255,255,255,.18);
+      border-radius:999px;
+      opacity:.85;
     }
   </style>
 </head>
 <body>
-  <div>
-    <div class="msg">Te amo infinitamente ♾️</div>
-    <div class="sub">— para ti, siempre.</div>
-  </div>
+  <header>
+    <div>💌 Escribiendo “Te amo” sin parar…</div>
+    <div class="pill" id="counter">0</div>
+  </header>
+
+  <main id="wall"></main>
+
+  <script>
+    const wall = document.getElementById("wall");
+    const counter = document.getElementById("counter");
+
+    let n = 0;
+    const chunk = "Te amo ";
+
+    // Ajusta la velocidad (ms): menor = más rápido
+    const SPEED_MS = 35;
+
+    function tick(){
+      // Añade en bloque para que vaya fluido
+      const add = chunk.repeat(12);
+      wall.textContent += add;
+      n += 12;
+
+      counter.textContent = `${n} veces`;
+
+      // Mantén el scroll al final
+      wall.scrollTop = wall.scrollHeight;
+
+      // Evita que el DOM crezca infinito (mantiene las últimas X letras)
+      const MAX_CHARS = 20000;
+      if (wall.textContent.length > MAX_CHARS) {
+        wall.textContent = wall.textContent.slice(-MAX_CHARS);
+      }
+    }
+
+    setInterval(tick, SPEED_MS);
+  </script>
 </body>
 </html>
